@@ -1,37 +1,33 @@
 import os
 import math
+import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error
 import numpy as np
+
 def normalEqn(X,y):
     theta = np.zeros((np.shape(X)[1]),dtype=np.int16)
-    trans_X = X.transpose()
+    trans_X = X.transpose()                     
     tmp_X = trans_X @ X
     theta = np.linalg.inv(tmp_X) @ trans_X @ y;
     return theta 
+
+#loading dataset
 data = pd.read_csv('Admission_Predict.csv', index_col=False) 
 dt=data.to_numpy()
+
 X= dt[:,1:8]
 y= dt[:,8:9]
-
-# mean = np.mean(X,axis=0)
-# std = np.std(X,axis=0)
-# X = X - mean
-# X = X / std
-# print(X[0:1])
-# print(mean)
-# print(std)
-
-
 X = np.append(np.ones((400,1), dtype=np.int16),X,axis=1)
+
+#Apply Linear regression using NormalEquation
 theta = normalEqn(X,y)
 
-train_X = X[0:]
-train_y = train_X @ theta  
+#Testing linearRegression
+test_y = X @ theta  
 
-test_y = y[0:]
-mse = sklearn.metrics.mean_squared_error(train_y, test_y)
+#Root Mean Squared Error
+mse = mean_squared_error(train_y, y)
 rmse = math.sqrt(mse)
 print(rmse)
-# print(X.shape)
-# print(y.shape)
+
